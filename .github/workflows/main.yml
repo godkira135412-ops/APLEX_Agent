@@ -1,0 +1,16 @@
+name: APLEX Worker
+on:
+  repository_dispatch:
+    types: [run_task]
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          chmod +x worker.sh
+          ./worker.sh "${{ github.event.client_payload.task }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: task-output
+          path: output.txt
